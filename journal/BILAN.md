@@ -29,7 +29,7 @@ Le détail de chaque séance est consigné dans `journal/AAAA-MM-JJ.md`. Ce fich
 
 | Date | Valeurs retenues | Positions ouvertes | Anomalies |
 |---|---|---|---|
-| 2026-09-09 | ORLY, VRTX, IDXX | 6 | Push et issue refusés (403) ; limites de données documentées |
+| 2026-09-09 | ORLY, VRTX, IDXX | 6 | Droits GitHub manquants au 1er essai (résolu) ; limites de données documentées |
 
 ### Trades anormaux (positions orphelines rattrapées)
 
