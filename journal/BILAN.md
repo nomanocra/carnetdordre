@@ -21,16 +21,50 @@ Stratégie de référence : Zarattini, Barbon & Aziz (2024), *A Profitable Day T
 
 **2026-09-09** (mercredi).
 
+## Méthodologie de calcul
+
+Ce fichier est intégralement régénéré chaque soir par `journal/calcul_bilan.py`, qui relit tous les fichiers `journal/AAAA-MM-JJ.md` depuis le début et recalcule l'ensemble des chiffres à partir des données brutes (jamais à partir de ce fichier lui-même).
+
+- **Performance cumulée des tracks x2 / x5** : somme des P&L nets (frais compris) de tous les trades du track, rapportée à la somme des capitaux engagés sur ce track (non composé — chaque position est un pari indépendant de ~100 USD, pas un capital qui roule).
+- **QQQ sans levier depuis le premier jour** : variation du cours QQQ entre la valeur relevée à l'ouverture du premier jour de l'expérience et la clôture du jour considéré.
+- **QQQ à levier x2 / x5** : la performance QQQ sans levier multipliée par 2 ou par 5 (exposition identique aux tracks, sans frais de financement ni rebalancement journalier — approximation volontairement simple). C'est cette comparaison, à levier égal, qui mesure une compétence de sélection — battre QQQ sans levier avec du levier ne prouve rien.
+- **Max drawdown** : plus forte baisse pic-à-creux de la courbe cumulée (en points de %), recalculée jour après jour.
+- **Jours anormaux** : tout journal contenant la mention `ANOMALIE` (journal du matin manquant, fermeture échouée, position orpheline...). Les trades de ces jours restent inclus dans les cumuls (l'argent gagné/perdu est réel) mais le jour reste identifiable.
+- **Séances écourtées** : jours de clôture anticipée (13h00 New York). Incluses dans les cumuls mais isolables — l'amplitude des mouvements y est mécaniquement réduite, donc non comparable aux autres jours.
+
+## Tableau récapitulatif
+
+_Dernière mise à jour : 2026-09-09 19:54 UTC — 1 jour(s) de bourse clôturé(s)._
+
+| | Perf. cumulée | Max drawdown | Capital engagé |
+|---|---|---|---|
+| **Track x2** | -2.06 % | -2.06 % | 300.00 USD |
+| **Track x5** | -5.68 % | -5.68 % | 299.99 USD |
+| QQQ sans levier | -0.15 % | -0.15 % | — |
+| QQQ à levier x2 (même exposition que le track x2) | -0.30 % | -0.30 % | — |
+| QQQ à levier x5 (même exposition que le track x5) | -0.76 % | -0.76 % | — |
+
+**Comparaison à levier égal** : le track x2 perd contre QQQ x2 (-2.06 % vs -0.30 %) ; le track x5 perd contre QQQ x5 (-5.68 % vs -0.76 %).
+
+## Statistiques de trading
+
+- **Jours de bourse écoulés** : 1
+- **Nombre de trades** : 6
+- **Taux de réussite** : 0.0 %
+- **Gain moyen (trades gagnants)** : n/a (aucun trade gagnant à ce jour)
+- **Perte moyenne (trades perdants)** : -3.87 USD
+- **Jours anormaux** (journal du matin manquant, fermeture échouée, position orpheline) : 0
+- **Séances écourtées** (clôture anticipée) : 0
+- **QQQ, référence de départ (J1)** : 717.12
+- **QQQ, dernière clôture connue** : 716.03
+
 ## Suivi
 
 Le détail de chaque séance est consigné dans `journal/AAAA-MM-JJ.md`. Ce fichier agrège les résultats.
 
 ### Journal des séances
 
-| Date | Valeurs retenues | Positions ouvertes | Anomalies |
-|---|---|---|---|
-| 2026-09-09 | ORLY, VRTX, IDXX | 6 | Droits GitHub manquants au 1er essai (résolu) ; limites de données documentées |
+| Date | Trades | P&L x2 (USD) | P&L x5 (USD) | QQQ clôture | Anomalie | Écourtée |
+|---|---|---|---|---|---|---|
+| 2026-09-09 | 6 | -6.17 | -17.04 | 716.03 | non | non |
 
-### Trades anormaux (positions orphelines rattrapées)
-
-Aucun à ce jour.
