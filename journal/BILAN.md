@@ -34,29 +34,29 @@ Ce fichier est intégralement régénéré chaque soir par `journal/calcul_bilan
 
 ## Tableau récapitulatif
 
-_Dernière mise à jour : 2026-09-14 19:54 UTC — 4 jour(s) de bourse clôturé(s)._
+_Dernière mise à jour : 2026-09-15 19:52 UTC — 5 jour(s) de bourse clôturé(s)._
 
 | | Perf. cumulée | Max drawdown | Capital engagé |
 |---|---|---|---|
-| **Track x2** | +1.49 % | -2.06 % | 799.97 USD |
-| **Track x5** | +3.44 % | -5.68 % | 799.97 USD |
-| QQQ sans levier | -0.88 % | -1.17 % | — |
-| QQQ à levier x2 (même exposition que le track x2) | -1.76 % | -2.33 % | — |
-| QQQ à levier x5 (même exposition que le track x5) | -4.41 % | -5.83 % | — |
+| **Track x2** | +1.11 % | -2.06 % | 1 099.96 USD |
+| **Track x5** | +2.57 % | -5.68 % | 1 099.96 USD |
+| QQQ sans levier | -1.85 % | -1.85 % | — |
+| QQQ à levier x2 (même exposition que le track x2) | -3.70 % | -3.70 % | — |
+| QQQ à levier x5 (même exposition que le track x5) | -9.25 % | -9.25 % | — |
 
-**Comparaison à levier égal** : le track x2 bat QQQ x2 (+1.49 % vs -1.76 %) ; le track x5 bat QQQ x5 (+3.44 % vs -4.41 %).
+**Comparaison à levier égal** : le track x2 bat QQQ x2 (+1.11 % vs -3.70 %) ; le track x5 bat QQQ x5 (+2.57 % vs -9.25 %).
 
 ## Statistiques de trading
 
-- **Jours de bourse écoulés** : 4
-- **Nombre de trades** : 16
-- **Taux de réussite** : 37.5 %
-- **Gain moyen (trades gagnants)** : 12.82 USD
-- **Perte moyenne (trades perdants)** : -3.75 USD
+- **Jours de bourse écoulés** : 5
+- **Nombre de trades** : 22
+- **Taux de réussite** : 45.5 %
+- **Gain moyen (trades gagnants)** : 8.50 USD
+- **Perte moyenne (trades perdants)** : -3.71 USD
 - **Jours anormaux** (journal du matin manquant, fermeture échouée, position orpheline) : 2
 - **Séances écourtées** (clôture anticipée) : 0
 - **QQQ, référence de départ (J1)** : 717.12
-- **QQQ, dernière clôture connue** : 710.80
+- **QQQ, dernière clôture connue** : 703.86
 
 ## Suivi
 
@@ -70,4 +70,5 @@ Le détail de chaque séance est consigné dans `journal/AAAA-MM-JJ.md`. Ce fich
 | 2026-09-10 | 0 | 0.00 | 0.00 | 708.76 | oui | non |
 | 2026-09-11 | 4 | 1.90 | 4.45 | 715.15 | non | non |
 | 2026-09-14 | 6 | 16.15 | 40.12 | 710.80 | oui | non |
+| 2026-09-15 | 6 | 0.28 | 0.79 | 703.86 | non | non |
 
