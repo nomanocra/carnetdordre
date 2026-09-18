@@ -1,0 +1,3 @@
+# Bytecode Python genere a l execution des scripts de calcul
+__pycache__/
+*.py[cod]
