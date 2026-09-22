@@ -34,29 +34,29 @@ Ce fichier est intégralement régénéré chaque soir par `journal/calcul_bilan
 
 ## Tableau récapitulatif
 
-_Dernière mise à jour : 2026-09-21 19:52 UTC — 9 jour(s) de bourse clôturé(s)._
+_Dernière mise à jour : 2026-09-22 19:53 UTC — 10 jour(s) de bourse clôturé(s)._
 
 | | Perf. cumulée | Max drawdown | Capital engagé |
 |---|---|---|---|
-| **Track x2** | +1.31 % | -2.06 % | 2 299.87 USD |
-| **Track x5** | +3.30 % | -5.68 % | 2 299.88 USD |
-| QQQ sans levier | +3.25 % | -2.16 % | — |
-| QQQ à levier x2 (même exposition que le track x2) | +6.50 % | -4.32 % | — |
-| QQQ à levier x5 (même exposition que le track x5) | +16.25 % | -10.81 % | — |
+| **Track x2** | +1.25 % | -2.06 % | 2 399.86 USD |
+| **Track x5** | +3.14 % | -5.68 % | 2 399.88 USD |
+| QQQ sans levier | +4.29 % | -2.16 % | — |
+| QQQ à levier x2 (même exposition que le track x2) | +8.59 % | -4.32 % | — |
+| QQQ à levier x5 (même exposition que le track x5) | +21.47 % | -10.81 % | — |
 
-**Comparaison à levier égal** : le track x2 perd contre QQQ x2 (+1.31 % vs +6.50 %) ; le track x5 perd contre QQQ x5 (+3.30 % vs +16.25 %).
+**Comparaison à levier égal** : le track x2 perd contre QQQ x2 (+1.25 % vs +8.59 %) ; le track x5 perd contre QQQ x5 (+3.14 % vs +21.47 %).
 
 ## Statistiques de trading
 
-- **Jours de bourse écoulés** : 9
-- **Nombre de trades** : 46
-- **Taux de réussite** : 56.5 %
+- **Jours de bourse écoulés** : 10
+- **Nombre de trades** : 48
+- **Taux de réussite** : 54.2 %
 - **Gain moyen (trades gagnants)** : 6.94 USD
-- **Perte moyenne (trades perdants)** : -3.71 USD
-- **Jours anormaux** (journal du matin manquant, fermeture échouée, position orpheline) : 4
+- **Perte moyenne (trades perdants)** : -3.41 USD
+- **Jours anormaux** (journal du matin manquant, fermeture échouée, position orpheline) : 5
 - **Séances écourtées** (clôture anticipée) : 0
 - **QQQ, référence de départ (J1)** : 717.12
-- **QQQ, dernière clôture connue** : 740.43
+- **QQQ, dernière clôture connue** : 747.91
 
 ## Suivi
 
@@ -75,4 +75,5 @@ Le détail de chaque séance est consigné dans `journal/AAAA-MM-JJ.md`. Ce fich
 | 2026-09-17 | 6 | -1.16 | -2.52 | 717.73 | oui | non |
 | 2026-09-18 | 6 | 4.41 | 11.17 | 717.89 | non | non |
 | 2026-09-21 | 6 | 19.47 | 50.61 | 740.43 | non | non |
+| 2026-09-22 | 2 | -0.25 | -0.63 | 747.91 | oui | non |
 
