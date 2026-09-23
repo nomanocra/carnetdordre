@@ -34,29 +34,29 @@ Ce fichier est intégralement régénéré chaque soir par `journal/calcul_bilan
 
 ## Tableau récapitulatif
 
-_Dernière mise à jour : 2026-09-22 19:53 UTC — 10 jour(s) de bourse clôturé(s)._
+_Dernière mise à jour : 2026-09-23 19:52 UTC — 11 jour(s) de bourse clôturé(s)._
 
 | | Perf. cumulée | Max drawdown | Capital engagé |
 |---|---|---|---|
-| **Track x2** | +1.25 % | -2.06 % | 2 399.86 USD |
-| **Track x5** | +3.14 % | -5.68 % | 2 399.88 USD |
-| QQQ sans levier | +4.29 % | -2.16 % | — |
-| QQQ à levier x2 (même exposition que le track x2) | +8.59 % | -4.32 % | — |
-| QQQ à levier x5 (même exposition que le track x5) | +21.47 % | -10.81 % | — |
+| **Track x2** | +1.09 % | -2.06 % | 2 699.84 USD |
+| **Track x5** | +2.66 % | -5.68 % | 2 699.86 USD |
+| QQQ sans levier | +3.19 % | -2.16 % | — |
+| QQQ à levier x2 (même exposition que le track x2) | +6.38 % | -4.32 % | — |
+| QQQ à levier x5 (même exposition que le track x5) | +15.95 % | -10.81 % | — |
 
-**Comparaison à levier égal** : le track x2 perd contre QQQ x2 (+1.25 % vs +8.59 %) ; le track x5 perd contre QQQ x5 (+3.14 % vs +21.47 %).
+**Comparaison à levier égal** : le track x2 perd contre QQQ x2 (+1.09 % vs +6.38 %) ; le track x5 perd contre QQQ x5 (+2.66 % vs +15.95 %).
 
 ## Statistiques de trading
 
-- **Jours de bourse écoulés** : 10
-- **Nombre de trades** : 48
-- **Taux de réussite** : 54.2 %
-- **Gain moyen (trades gagnants)** : 6.94 USD
-- **Perte moyenne (trades perdants)** : -3.41 USD
-- **Jours anormaux** (journal du matin manquant, fermeture échouée, position orpheline) : 5
+- **Jours de bourse écoulés** : 11
+- **Nombre de trades** : 54
+- **Taux de réussite** : 51.9 %
+- **Gain moyen (trades gagnants)** : 6.55 USD
+- **Perte moyenne (trades perdants)** : -3.16 USD
+- **Jours anormaux** (journal du matin manquant, fermeture échouée, position orpheline) : 6
 - **Séances écourtées** (clôture anticipée) : 0
 - **QQQ, référence de départ (J1)** : 717.12
-- **QQQ, dernière clôture connue** : 747.91
+- **QQQ, dernière clôture connue** : 739.99
 
 ## Suivi
 
@@ -76,4 +76,5 @@ Le détail de chaque séance est consigné dans `journal/AAAA-MM-JJ.md`. Ce fich
 | 2026-09-18 | 6 | 4.41 | 11.17 | 717.89 | non | non |
 | 2026-09-21 | 6 | 19.47 | 50.61 | 740.43 | non | non |
 | 2026-09-22 | 2 | -0.25 | -0.63 | 747.91 | oui | non |
+| 2026-09-23 | 6 | -0.46 | -3.46 | 739.99 | oui | non |
 
