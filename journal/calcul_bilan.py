@@ -4,6 +4,10 @@ Recalcule le bilan cumule de l'experience ORB a effet de levier vs QQQ
 a partir des fichiers bruts journal/AAAA-MM-JJ.md (jamais a partir d'un
 BILAN.md precedent, pour eviter toute propagation d'erreur).
 
+Le track x2 est abandonne depuis le 2026-09-24 : toutes les positions a
+levier x2 (journaux demo comme reel) sont ignorees dans tous les calculs
+cumules, y compris pour les journees anterieures a cette date.
+
 Usage : python3 journal/calcul_bilan.py
 Ecrit journal/BILAN.md en entier (section statique + section calculee).
 """
@@ -121,21 +125,21 @@ def build_bilan(days):
             qqq_baseline = d["qqq_open"]
             break
 
-    # --- Tracks x2 / x5 : P&L journalier, capital engage, courbe cumulee ---
-    tracks = {2: [], 5: []}  # liste de (date, pnl_jour, capital_jour)
+    # --- Track x5 uniquement : P&L journalier, capital engage, courbe cumulee ---
+    # Le track x2 est abandonne depuis le 2026-09-24 : ses positions sont
+    # ignorees, y compris dans les journaux anterieurs a cette date.
+    track_x5 = []  # liste de (date, pnl_jour, capital_jour)
     all_trades = []
     for d in closed_days:
-        pnl_by_lev = {2: 0.0, 5: 0.0}
-        cap_by_lev = {2: 0.0, 5: 0.0}
+        pnl_day = 0.0
+        cap_day = 0.0
         for p in d["positions"]:
-            lev = p["levier"]
-            if lev not in pnl_by_lev:
+            if p["levier"] != 5:
                 continue
-            pnl_by_lev[lev] += p["pnl_net"]
-            cap_by_lev[lev] += p["investissement"]
+            pnl_day += p["pnl_net"]
+            cap_day += p["investissement"]
             all_trades.append(p)
-        for lev in (2, 5):
-            tracks[lev].append((d["date"], pnl_by_lev[lev], cap_by_lev[lev]))
+        track_x5.append((d["date"], pnl_day, cap_day))
 
     def track_stats(entries):
         total_pnl = sum(pnl for _, pnl, _ in entries)
@@ -151,26 +155,22 @@ def build_bilan(days):
         mdd = max_drawdown(curve)
         return total_pnl, total_cap, cum_pct, mdd
 
-    pnl_x2, cap_x2, cum_x2, mdd_x2 = track_stats(tracks[2])
-    pnl_x5, cap_x5, cum_x5, mdd_x5 = track_stats(tracks[5])
+    pnl_x5, cap_x5, cum_x5, mdd_x5 = track_stats(track_x5)
 
-    # --- QQQ : sans levier / x2 / x5 (meme exposition, sans frais de financement) ---
-    qqq_curve_unlev, qqq_curve_x2, qqq_curve_x5 = [], [], []
+    # --- QQQ : sans levier / x5 (meme exposition que le track x5, sans frais de financement) ---
+    qqq_curve_unlev, qqq_curve_x5 = [], []
     qqq_last_close = None
     for d in closed_days:
         if d["qqq_close"] is None or qqq_baseline is None:
             continue
         ret_pct = (d["qqq_close"] / qqq_baseline - 1) * 100
         qqq_curve_unlev.append((d["date"], ret_pct))
-        qqq_curve_x2.append((d["date"], ret_pct * 2))
         qqq_curve_x5.append((d["date"], ret_pct * 5))
         qqq_last_close = d["qqq_close"]
 
     qqq_cum_unlev = qqq_curve_unlev[-1][1] if qqq_curve_unlev else 0.0
-    qqq_cum_x2 = qqq_curve_x2[-1][1] if qqq_curve_x2 else 0.0
     qqq_cum_x5 = qqq_curve_x5[-1][1] if qqq_curve_x5 else 0.0
     qqq_mdd_unlev = max_drawdown(qqq_curve_unlev)
-    qqq_mdd_x2 = max_drawdown(qqq_curve_x2)
     qqq_mdd_x5 = max_drawdown(qqq_curve_x5)
 
     # --- Stats de trading (tous leviers confondus) ---
@@ -193,10 +193,6 @@ def build_bilan(days):
         "avg_loss": avg_loss,
         "n_anomalies": n_anomalies,
         "n_shortened": n_shortened,
-        "pnl_x2": pnl_x2,
-        "cap_x2": cap_x2,
-        "cum_x2": cum_x2,
-        "mdd_x2": mdd_x2,
         "pnl_x5": pnl_x5,
         "cap_x5": cap_x5,
         "cum_x5": cum_x5,
@@ -204,10 +200,8 @@ def build_bilan(days):
         "qqq_baseline": qqq_baseline,
         "qqq_last_close": qqq_last_close,
         "qqq_cum_unlev": qqq_cum_unlev,
-        "qqq_cum_x2": qqq_cum_x2,
         "qqq_cum_x5": qqq_cum_x5,
         "qqq_mdd_unlev": qqq_mdd_unlev,
-        "qqq_mdd_x2": qqq_mdd_x2,
         "qqq_mdd_x5": qqq_mdd_x5,
         "closed_days": closed_days,
     }
@@ -244,7 +238,10 @@ def render_bilan(stats):
     lines.append("")
     lines.append("## Cadre")
     lines.append("")
-    lines.append("- **Compte** : DEMO eToro exclusivement (cid 7632001). Aucune position sur le compte réel.")
+    lines.append(
+        "- **Compte** : DEMO eToro (cid 7632001) du début de l'expérience au 2026-09-23, "
+        "puis RÉEL eToro (cid 6288463) exclusivement à partir du 2026-09-24."
+    )
     lines.append("- **Univers** : les 100 valeurs du Nasdaq-100.")
     lines.append(
         "- **Range d'ouverture** : première bougie de 5 minutes (09h30–09h35, heure de New York). "
@@ -257,8 +254,10 @@ def render_bilan(stats):
     lines.append("- **Signal** : cours actuel strictement supérieur à RH.")
     lines.append("- **Sélection** : les 3 plus forts volumes relatifs parmi les candidats.")
     lines.append(
-        "- **Positions** : pour chaque valeur retenue, deux positions longues de 100 USD, "
-        "l'une à levier x2, l'autre à levier x5, stop loss placé sur RL."
+        "- **Positions** : pour chaque valeur retenue, une position longue de 100 USD à levier x5, "
+        "stop loss placé sur RL. **Le track x2 (positions à levier 2) est abandonné depuis le "
+        "2026-09-24** et exclu de tous les calculs ci-dessous, y compris pour les journées "
+        "antérieures à cette date."
     )
     lines.append("- **Sortie** : clôture de toutes les positions en fin de séance (routine du soir).")
     lines.append("")
@@ -275,17 +274,18 @@ def render_bilan(stats):
     )
     lines.append("")
     lines.append(
-        "- **Performance cumulée des tracks x2 / x5** : somme des P&L nets (frais compris) de tous "
+        "- **Performance cumulée du track x5** : somme des P&L nets (frais compris) de tous "
         "les trades du track, rapportée à la somme des capitaux engagés sur ce track (non composé — "
-        "chaque position est un pari indépendant de ~100 USD, pas un capital qui roule)."
+        "chaque position est un pari indépendant de ~100 USD, pas un capital qui roule). Les positions "
+        "à levier x2 sont ignorées (track abandonné depuis le 2026-09-24)."
     )
     lines.append(
         "- **QQQ sans levier depuis le premier jour** : variation du cours QQQ entre la valeur relevée "
         "à l'ouverture du premier jour de l'expérience et la clôture du jour considéré."
     )
     lines.append(
-        "- **QQQ à levier x2 / x5** : la performance QQQ sans levier multipliée par 2 ou par 5 "
-        "(exposition identique aux tracks, sans frais de financement ni rebalancement journalier — "
+        "- **QQQ à levier x5** : la performance QQQ sans levier multipliée par 5 "
+        "(exposition identique au track x5, sans frais de financement ni rebalancement journalier — "
         "approximation volontairement simple). C'est cette comparaison, à levier égal, qui mesure "
         "une compétence de sélection — battre QQQ sans levier avec du levier ne prouve rien."
     )
@@ -310,18 +310,13 @@ def render_bilan(stats):
     lines.append("")
     lines.append("| | Perf. cumulée | Max drawdown | Capital engagé |")
     lines.append("|---|---|---|---|")
-    lines.append(f"| **Track x2** | {fmt_pct(stats['cum_x2'])} | {fmt_pct(stats['mdd_x2'])} | {fmt(stats['cap_x2'])} USD |")
     lines.append(f"| **Track x5** | {fmt_pct(stats['cum_x5'])} | {fmt_pct(stats['mdd_x5'])} | {fmt(stats['cap_x5'])} USD |")
     lines.append(f"| QQQ sans levier | {fmt_pct(stats['qqq_cum_unlev'])} | {fmt_pct(stats['qqq_mdd_unlev'])} | — |")
-    lines.append(f"| QQQ à levier x2 (même exposition que le track x2) | {fmt_pct(stats['qqq_cum_x2'])} | {fmt_pct(stats['qqq_mdd_x2'])} | — |")
     lines.append(f"| QQQ à levier x5 (même exposition que le track x5) | {fmt_pct(stats['qqq_cum_x5'])} | {fmt_pct(stats['qqq_mdd_x5'])} | — |")
     lines.append("")
-    verdict_x2 = "bat" if stats["cum_x2"] > stats["qqq_cum_x2"] else ("égale" if stats["cum_x2"] == stats["qqq_cum_x2"] else "perd contre")
     verdict_x5 = "bat" if stats["cum_x5"] > stats["qqq_cum_x5"] else ("égale" if stats["cum_x5"] == stats["qqq_cum_x5"] else "perd contre")
     lines.append(
-        f"**Comparaison à levier égal** : le track x2 {verdict_x2} QQQ x2 "
-        f"({fmt_pct(stats['cum_x2'])} vs {fmt_pct(stats['qqq_cum_x2'])}) ; "
-        f"le track x5 {verdict_x5} QQQ x5 "
+        f"**Comparaison à levier égal** : le track x5 {verdict_x5} QQQ x5 "
         f"({fmt_pct(stats['cum_x5'])} vs {fmt_pct(stats['qqq_cum_x5'])})."
     )
     lines.append("")
@@ -345,15 +340,14 @@ def render_bilan(stats):
     lines.append("")
     lines.append("### Journal des séances")
     lines.append("")
-    lines.append("| Date | Trades | P&L x2 (USD) | P&L x5 (USD) | QQQ clôture | Anomalie | Écourtée |")
-    lines.append("|---|---|---|---|---|---|---|")
+    lines.append("| Date | Trades x5 | P&L x5 (USD) | QQQ clôture | Anomalie | Écourtée |")
+    lines.append("|---|---|---|---|---|---|")
     for d in stats["closed_days"]:
-        n_tr = len(d["positions"])
-        pnl2 = sum(p["pnl_net"] for p in d["positions"] if p["levier"] == 2)
-        pnl5 = sum(p["pnl_net"] for p in d["positions"] if p["levier"] == 5)
+        pos5 = [p for p in d["positions"] if p["levier"] == 5]
+        pnl5 = sum(p["pnl_net"] for p in pos5)
         qqq_c = fmt(d["qqq_close"]) if d["qqq_close"] is not None else "n/a"
         lines.append(
-            f"| {d['date']} | {n_tr} | {fmt(pnl2)} | {fmt(pnl5)} | {qqq_c} | "
+            f"| {d['date']} | {len(pos5)} | {fmt(pnl5)} | {qqq_c} | "
             f"{'oui' if d['anomaly'] else 'non'} | {'oui' if d['shortened'] else 'non'} |"
         )
     lines.append("")
