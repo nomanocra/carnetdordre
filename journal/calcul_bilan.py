@@ -15,10 +15,38 @@ Ecrit journal/BILAN.md en entier (section statique + section calculee).
 import glob
 import os
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 
 JOURNAL_DIR = os.path.dirname(os.path.abspath(__file__))
 BILAN_PATH = os.path.join(JOURNAL_DIR, "BILAN.md")
+
+# Jours de fermeture complete NYSE/Nasdaq connus (cf. consigne de la routine).
+# Utilise uniquement pour detecter les jours de bourse SANS AUCUN fichier
+# journal (trous silencieux de l'automatisation), a distinguer des jours
+# normalement feries.
+KNOWN_HOLIDAYS = {
+    "2026-09-07", "2026-11-26", "2026-12-25",
+    "2027-01-01", "2027-01-18", "2027-02-15", "2027-03-26",
+    "2027-05-31", "2027-06-18", "2027-09-06",
+}
+
+
+def missing_weekdays(dates):
+    """Jours ouvres (lun-ven, hors KNOWN_HOLIDAYS) entre la 1re et la derniere
+    date de la liste pour lesquels AUCUN fichier journal n'existe du tout."""
+    if len(dates) < 2:
+        return []
+    start = datetime.strptime(min(dates), "%Y-%m-%d")
+    end = datetime.strptime(max(dates), "%Y-%m-%d")
+    present = set(dates)
+    missing = []
+    d = start
+    while d <= end:
+        ds = d.strftime("%Y-%m-%d")
+        if d.weekday() < 5 and ds not in KNOWN_HOLIDAYS and ds not in present:
+            missing.append(ds)
+        d += timedelta(days=1)
+    return missing
 
 
 def fr_num(s):
@@ -184,6 +212,7 @@ def build_bilan(days):
     n_days = len(closed_days)
     n_anomalies = sum(1 for d in days if d["anomaly"])
     n_shortened = sum(1 for d in days if d["shortened"])
+    gap_days = missing_weekdays([d["date"] for d in days])
 
     return {
         "n_days": n_days,
@@ -193,6 +222,7 @@ def build_bilan(days):
         "avg_loss": avg_loss,
         "n_anomalies": n_anomalies,
         "n_shortened": n_shortened,
+        "gap_days": gap_days,
         "pnl_x5": pnl_x5,
         "cap_x5": cap_x5,
         "cum_x5": cum_x5,
@@ -303,6 +333,14 @@ def render_bilan(stats):
         "mais isolables — l'amplitude des mouvements y est mécaniquement réduite, donc non comparable "
         "aux autres jours."
     )
+    lines.append(
+        "- **Jours de bourse sans aucun journal** : jours ouvrés (hors fermetures NYSE/Nasdaq connues) "
+        "compris entre le premier et le dernier journal existant, pour lesquels **aucun fichier** "
+        "`journal/AAAA-MM-JJ.md` n'a été créé — panne silencieuse de l'automatisation, distincte d'un "
+        "« jour anormal » (qui suppose qu'un journal existe). Ces jours ne sont inclus dans **aucun** "
+        "calcul ci-dessus (ni trades, ni QQQ) faute de donnée : les cumuls sous-estiment donc la durée "
+        "réelle écoulée d'autant."
+    )
     lines.append("")
     lines.append("## Tableau récapitulatif")
     lines.append("")
@@ -329,6 +367,12 @@ def render_bilan(stats):
     lines.append(f"- **Perte moyenne (trades perdants)** : {fmt(stats['avg_loss'])} USD" if stats['avg_loss'] is not None else "- **Perte moyenne (trades perdants)** : n/a")
     lines.append(f"- **Jours anormaux** (journal du matin manquant, fermeture échouée, position orpheline) : {stats['n_anomalies']}")
     lines.append(f"- **Séances écourtées** (clôture anticipée) : {stats['n_shortened']}")
+    n_gap = len(stats["gap_days"])
+    if n_gap:
+        gap_list = ", ".join(stats["gap_days"])
+        lines.append(f"- **Jours de bourse sans aucun journal** : {n_gap} ({gap_list})")
+    else:
+        lines.append("- **Jours de bourse sans aucun journal** : 0")
     if stats["qqq_baseline"] is not None:
         lines.append(f"- **QQQ, référence de départ (J1)** : {fmt(stats['qqq_baseline'])}")
     if stats["qqq_last_close"] is not None:
