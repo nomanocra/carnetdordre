@@ -35,28 +35,28 @@ Ce fichier est intégralement régénéré chaque soir par `journal/calcul_bilan
 
 ## Tableau récapitulatif
 
-_Dernière mise à jour : 2026-10-02 19:53 UTC — 15 jour(s) de bourse clôturé(s)._
+_Dernière mise à jour : 2026-10-05 19:51 UTC — 16 jour(s) de bourse clôturé(s)._
 
 | | Perf. cumulée | Max drawdown | Capital engagé |
 |---|---|---|---|
 | **Track x5** | +2.09 % | -9.90 % | 3 399.86 USD |
-| QQQ sans levier | +4.39 % | -2.16 % | — |
-| QQQ à levier x5 (même exposition que le track x5) | +21.96 % | -10.81 % | — |
+| QQQ sans levier | +5.29 % | -2.16 % | — |
+| QQQ à levier x5 (même exposition que le track x5) | +26.44 % | -10.81 % | — |
 
-**Comparaison à levier égal** : le track x5 perd contre QQQ x5 (+2.09 % vs +21.96 %).
+**Comparaison à levier égal** : le track x5 perd contre QQQ x5 (+2.09 % vs +26.44 %).
 
 ## Statistiques de trading
 
-- **Jours de bourse écoulés** : 15
+- **Jours de bourse écoulés** : 16
 - **Nombre de trades** : 34
 - **Taux de réussite** : 52.9 %
 - **Gain moyen (trades gagnants)** : 8.10 USD
 - **Perte moyenne (trades perdants)** : -4.67 USD
-- **Jours anormaux** (journal du matin manquant, fermeture échouée, position orpheline) : 8
+- **Jours anormaux** (journal du matin manquant, fermeture échouée, position orpheline) : 9
 - **Séances écourtées** (clôture anticipée) : 0
 - **Jours de bourse sans aucun journal** : 3 (2026-09-28, 2026-09-29, 2026-09-30)
 - **QQQ, référence de départ (J1)** : 717.12
-- **QQQ, dernière clôture connue** : 748.61
+- **QQQ, dernière clôture connue** : 755.04
 
 ## Suivi
 
@@ -81,4 +81,5 @@ Le détail de chaque séance est consigné dans `journal/AAAA-MM-JJ.md`. Ce fich
 | 2026-09-25 | 3 | 12.88 | 745.16 | non | non |
 | 2026-10-01 | 0 | 0.00 | 743.78 | oui | non |
 | 2026-10-02 | 3 | -5.46 | 748.61 | non | non |
+| 2026-10-05 | 0 | 0.00 | 755.04 | oui | non |
 
